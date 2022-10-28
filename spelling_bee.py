@@ -94,6 +94,12 @@ print("You can use each letter as many times as you like.")
 print("You must include the mandatory letter in each word.")
 print("You can only make words containing more than 4 letters.")
 print()
+print("Score is calculated as follows:")
+print("For 4 letter words, 1 point is awarded.")
+print("For words above 4 letters, the number of points awarded is equal to the length of the word.")
+print("Additionally, if a word is a panagram (i.e. it has every letter at least once), 7 points are awarded.")
+print()
+
 
 found_words = set()
 score = 0
@@ -115,6 +121,12 @@ while len(useable_words) > 0:
         print("You must include the mandatory letter in each word.")
         print("You can only make words containing more than 4 letters.")
         print()
+        print("Score is calculated as follows:")
+        print("For 4 letter words, 1 point is awarded.")
+        print("For words above 4 letters, the number of points awarded is equal to the length of the word.")
+        print("Additionally, if a word is a panagram (i.e. it has every letter at least once), 7 points are awarded.")
+        print()
+
     elif guess == "A":
         word_to_hint = random.choice(list(useable_words))
         pos_to_give = random.randint(0, len(word_to_hint) - 1)
