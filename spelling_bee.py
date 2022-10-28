@@ -72,6 +72,10 @@ tiers = {
 }
 
 print()
+print("  __  _   _       ___       __    _   _  _   ")
+print(" (_  |_) |_ |  |   |  |\ | /__   |_) |_ |_ | ")
+print(" __) |   |_ |_ |_ _|_ | \| \_|   |_) |_ |_ o ")
+                                             
 print(' ' * 5, mandatory_letter)
 print(" ".join(letters))
 print()
