@@ -75,17 +75,25 @@ print()
 print("  __  _   _       ___       __    _   _  _   ")
 print(" (_  |_) |_ |  |   |  |\ | /__   |_) |_ |_ | ")
 print(" __) |   |_ |_ |_ _|_ | \| \_|   |_) |_ |_ o ")
-                                             
+print()
 print(' ' * 5, mandatory_letter)
 print(" ".join(letters))
 print()
 print(f"{len(useable_words)} words, of which {len(panagrams)} are panagrams")
 print(f"Total possible score is {possible_score}")
+print()
 print("Tiers:")
 for tier, points in tiers.items():
     print(f"{tier}: {points} points")
+print()
 
-print("Commnads: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+print("Commands: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+print()
+print("Try to make words with the letters provided!")
+print("You can use each letter as many times as you like.")
+print("You must include the mandatory letter in each word.")
+print("You can only make words containing more than 4 letters.")
+print()
 
 found_words = set()
 score = 0
@@ -99,7 +107,14 @@ while len(useable_words) > 0:
     if guess == "Q":
         break
     elif guess == "H":
-        print("Commnads: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+        print()
+        print("Commands: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+        print()
+        print("Try to make words with the letters provided!")
+        print("You can use each letter as many times as you like.")
+        print("You must include the mandatory letter in each word.")
+        print("You can only make words containing more than 4 letters.")
+        print()
     elif guess == "A":
         word_to_hint = random.choice(list(useable_words))
         pos_to_give = random.randint(0, len(word_to_hint) - 1)
@@ -109,7 +124,7 @@ while len(useable_words) > 0:
             else:
                 print("_", end=" ")
         print()
-        continue
+        break
     elif guess == "-":
         print("Forfeited words:")
         for word in useable_words:
@@ -127,7 +142,9 @@ while len(useable_words) > 0:
     elif guess == "L":
         print()
         print(' ' * 5, mandatory_letter)
-        print(" ".join(letters))
+        l = list(letters)
+        random.shuffle(l)
+        print(" ".join(l))
         print()
         print(f"{len(useable_words) + len(found_words)} words, of which {len(panagrams)} are panagrams")
         print(f"Total possible score is {possible_score}")
