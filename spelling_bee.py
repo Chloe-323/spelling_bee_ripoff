@@ -50,19 +50,53 @@ for word in words:
         continue
     panagrams.add(word)
 
+possible_score = 0
+for word in useable_words:
+    if len(word) == 4:
+        possible_score += 1
+        continue
+    possible_score += len(word)
+    if word in panagrams:
+        possible_score += 7
+
+tiers = {
+    "Genius": int(possible_score * 0.7),
+    "Amazing": int(possible_score * 0.5),
+    "Great": int(possible_score * 0.4),
+    "Nice": int(possible_score * 0.25),
+    "Solid": int(possible_score * 0.15),
+    "Good": int(possible_score * 0.08),
+    "Moving Up": int(possible_score * 0.05),
+    "Good Start": int(possible_score * 0.02),
+    "Beginner": int(possible_score * 0.00),
+}
+
 print()
 print(' ' * 5, mandatory_letter)
 print(" ".join(letters))
 print()
 print(f"{len(useable_words)} words, of which {len(panagrams)} are panagrams")
-print("Commnads: \nq to quit\nh for hint\n- to forfeit and print all words\nm to print all found words\nl to print all letters")
+print(f"Total possible score is {possible_score}")
+print("Tiers:")
+for tier, points in tiers.items():
+    print(f"{tier}: {points} points")
+
+print("Commnads: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
 
 found_words = set()
+score = 0
 while len(useable_words) > 0:
-    guess = input(">>> ").upper()
+    tier = None
+    for s_tier, points in tiers.items():
+        if score >= points and (tier == None or tiers[s_tier] > tiers[tier]):
+            tier = s_tier
+        
+    guess = input(f"{score}({tier})>>> ").upper()
     if guess == "Q":
         break
     elif guess == "H":
+        print("Commnads: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+    elif guess == "A":
         word_to_hint = random.choice(list(useable_words))
         pos_to_give = random.randint(0, len(word_to_hint) - 1)
         for i in range(len(word_to_hint)):
@@ -78,6 +112,7 @@ while len(useable_words) > 0:
             if word in panagrams:
                 print("*", end=" ")
             print(word)
+        continue
         break
     elif guess == "M":
         for word in found_words:
@@ -87,18 +122,28 @@ while len(useable_words) > 0:
         continue
     elif guess == "L":
         print()
-        print(' ' * 4, mandatory_letter)
+        print(' ' * 5, mandatory_letter)
         print(" ".join(letters))
         print()
+        print(f"{len(useable_words) + len(found_words)} words, of which {len(panagrams)} are panagrams")
+        print(f"Total possible score is {possible_score}")
+        print("Tiers:")
+        for tier, points in tiers.items():
+            print(f"{tier}: {points} points")
         continue
     if guess not in useable_words:
         print("Not a valid guess")
         continue
     print(f"{guess} is a word!")
+    if len(guess) == 4:
+        score += 1
+    else:
+        score += len(guess)
     useable_words.remove(guess)
     found_words.add(guess)
     if guess in panagrams:
         print(f"{guess} is a panagram!")
+        score += 7
 if len(useable_words) == 0:
     print("Congratulations! You've found all the words!")
 print("Thanks for playing!")
