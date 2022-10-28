@@ -1,7 +1,9 @@
 import random
 from sys import unraisablehook
+from rich import print
+from rich.console import Console
 
-
+console = Console()
 #Open file
 
 words = None
@@ -20,8 +22,11 @@ for word in words:
     if len(letters) == 7:
         possible_letter_sets.append(letters)
 
-letters = random.choice(possible_letter_sets)
-mandatory_letter = random.choice(list(letters))
+letter_set = random.choice(possible_letter_sets)
+mandatory_letter = random.choice(list(letter_set))
+letter_set.remove(mandatory_letter)
+letters = list(letter_set)[0:3] + [mandatory_letter] + list(letter_set)[3:]
+
     
 useable_words = set()
 panagrams = set()
@@ -76,8 +81,10 @@ print("  __  _   _       ___       __    _   _  _   ")
 print(" (_  |_) |_ |  |   |  |\ | /__   |_) |_ |_ | ")
 print(" __) |   |_ |_ |_ _|_ | \| \_|   |_) |_ |_ o ")
 print()
-print(' ' * 5, mandatory_letter)
-print(" ".join(letters))
+
+console.print("", " ".join(letters[0:2]))
+console.print(letters[2], f"[bold red]{letters[3]}[/bold red]", letters[4])
+console.print(""," ".join(letters[5:]))
 print()
 print(f"{len(useable_words)} words, of which {len(panagrams)} are panagrams")
 print(f"Total possible score is {possible_score}")
@@ -87,7 +94,7 @@ for tier, points in tiers.items():
     print(f"{tier}: {points} points")
 print()
 
-print("Commands: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+print("Commands: \nq to quit\nh or ? for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
 print()
 print("Try to make words with the letters provided!")
 print("You can use each letter as many times as you like.")
@@ -112,9 +119,9 @@ while len(useable_words) > 0:
     guess = input(f"{score}({tier})>>> ").upper()
     if guess == "Q":
         break
-    elif guess == "H":
+    elif guess == "H" or guess == "?":
         print()
-        print("Commands: \nq to quit\nh for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
+        print("Commands: \nq to quit\nh or ? for help\n- to forfeit and print all words\nm to print all found words\nl to print all letters\na for a hint")
         print()
         print("Try to make words with the letters provided!")
         print("You can use each letter as many times as you like.")
@@ -126,7 +133,7 @@ while len(useable_words) > 0:
         print("For words above 4 letters, the number of points awarded is equal to the length of the word.")
         print("Additionally, if a word is a panagram (i.e. it has every letter at least once), 7 points are awarded.")
         print()
-
+        continue
     elif guess == "A":
         word_to_hint = random.choice(list(useable_words))
         pos_to_give = random.randint(0, len(word_to_hint) - 1)
@@ -136,14 +143,13 @@ while len(useable_words) > 0:
             else:
                 print("_", end=" ")
         print()
-        break
+        continue
     elif guess == "-":
         print("Forfeited words:")
         for word in useable_words:
             if word in panagrams:
                 print("*", end=" ")
             print(word)
-        continue
         break
     elif guess == "M":
         for word in found_words:
@@ -153,17 +159,29 @@ while len(useable_words) > 0:
         continue
     elif guess == "L":
         print()
-        print(' ' * 5, mandatory_letter)
-        l = list(letters)
+        l = letters[0:3] + letters[4:]
         random.shuffle(l)
-        print(" ".join(l))
+        console.print("", " ".join(l[0:2]))
+        console.print(l[2], f"[bold red]{mandatory_letter}[/bold red]", l[3])
+        console.print(""," ".join(l[4:]))
         print()
         print(f"{len(useable_words) + len(found_words)} words, of which {len(panagrams)} are panagrams")
         print(f"Total possible score is {possible_score}")
         print("Tiers:")
         for tier, points in tiers.items():
             print(f"{tier}: {points} points")
+        print()
         continue
+    if len(guess) < 4:
+        print("Too short!")
+        continue
+    if mandatory_letter not in guess:
+        print("You must include the mandatory letter in each word.")
+        continue
+    for letter in guess:
+        if letter not in letters:
+            print("You can only use the letters provided.")
+            break
     if guess not in useable_words:
         print("Not a valid guess")
         continue
