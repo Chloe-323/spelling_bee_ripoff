@@ -148,8 +148,9 @@ while len(useable_words) > 0:
         print("Forfeited words:")
         for word in useable_words:
             if word in panagrams:
-                print("*", end=" ")
-            print(word)
+                console.print(f"[bold red]{word}[/bold red]")
+            else:
+                print(word)
         break
     elif guess == "M":
         for word in found_words:
@@ -193,7 +194,7 @@ while len(useable_words) > 0:
     useable_words.remove(guess)
     found_words.add(guess)
     if guess in panagrams:
-        print(f"{guess} is a panagram!")
+        print(f"[bold red]{guess}[/bold red] is a panagram!")
         score += 7
 if len(useable_words) == 0:
     print("Congratulations! You've found all the words!")
